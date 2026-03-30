@@ -1,0 +1,85 @@
+.project-overview {
+  padding: 24px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  background: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.kpi-section {
+  margin-bottom: 24px;
+}
+
+/* 覆盖第三个 KPI 为红色（设计稿总删除行数是红色的） */
+.kpi-section .ant-col:nth-child(3) .kpi-card {
+  background-color: #fff1f0;
+}
+.kpi-section .ant-col:nth-child(3) .kpi-card-icon-wrapper {
+  background-color: #ff4d4f;
+}
+.kpi-section .ant-col:nth-child(3) .kpi-card-title,
+.kpi-section .ant-col:nth-child(3) .kpi-card-value {
+  color: #a8071a;
+}
+
+.project-list-card {
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.analysis-filter-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.analysis-filter-bar .filter-item {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 140px;
+  max-width: 200px;
+}
+
+.analysis-filter-bar .filter-label {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.analysis-filter-bar .search-btn {
+  min-width: 80px;
+  height: 32px;
+}
+
+.custom-table .ant-table-thead > tr > th {
+  background-color: #1890ff !important;
+  color: white !important;
+  font-weight: 500;
+}
+
+.custom-table .ant-table-thead th::before {
+  display: none !important;
+}
+
+.custom-table .ant-table-cell {
+  background-color: white !important; /* 防止 rowSpan hover 变色割裂 */
+}
+
+/* 表格内边框淡化 */
+.custom-table.ant-table-bordered .ant-table-container {
+  border-left: 1px solid #f0f0f0;
+}
+.custom-table.ant-table-bordered .ant-table-cell {
+  border-right: 1px solid #f0f0f0;
+}

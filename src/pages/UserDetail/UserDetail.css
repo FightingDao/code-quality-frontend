@@ -1,0 +1,237 @@
+.detail-page-wrapper {
+  padding: 24px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.page-top-header {
+  background: white;
+  padding: 24px 32px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.back-button {
+  padding: 0;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.report-generated-time {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.main-content-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* 像素级还原胶囊切换器 */
+.custom-capsule-switcher {
+  display: flex;
+  background-color: #f0f2f5;
+  padding: 4px;
+  border-radius: 100px; /* 全圆角 */
+  margin-bottom: 32px;
+  position: relative;
+  width: 100%;
+}
+
+.switcher-item {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  border-radius: 100px;
+}
+
+.switcher-item.active {
+  color: #1a1a1a;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-weight: 700;
+}
+
+/* Tab 1: Review Details Content */
+.review-item-main-card {
+  background-color: #f0f7ff;
+  margin-bottom: 24px;
+  border-radius: 12px;
+}
+
+.inner-card-title {
+  font-weight: 700;
+  font-size: 16px;
+  color: #1890ff;
+}
+
+.info-item-row {
+  margin-bottom: 12px;
+}
+
+.data-block-card {
+  margin-bottom: 20px;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+}
+
+.data-block-card .ant-card-head {
+  border-bottom: none;
+  min-height: 48px;
+  padding: 16px 24px 0 24px;
+}
+
+.data-block-card .ant-card-head-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.data-block-card.purple-theme {
+  border-color: #f9f0ff;
+}
+.data-block-card.purple-theme .ant-card-head-title {
+  color: #722ed1;
+}
+
+.v-stat-flex {
+  display: flex;
+  gap: 48px;
+}
+
+.v-stat-node {
+  font-size: 15px;
+  color: #666;
+}
+
+.v-stat-node span {
+  font-size: 18px;
+  font-weight: 700;
+  margin-left: 8px;
+}
+
+.file-dist-list .file-dist-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.file-dist-row:last-child { border-bottom: none; }
+.fw-700 { font-weight: 700; color: #333; }
+
+.ai-report-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ai-report-card {
+  border-radius: 12px;
+}
+
+.ai-card-title {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.ai-card-list {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.ai-card-list li {
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.warn-lite { background-color: #fffbe6; }
+.success-lite { background-color: #f6ffed; }
+.info-lite { background-color: #e6f7ff; }
+
+.big-score-text {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* Tab 2: Analysis Report Content */
+.block-header-title {
+  margin-bottom: 16px !important;
+  font-weight: 700 !important;
+  color: #333;
+}
+
+.blue-thead-table .ant-table-thead > tr > th {
+  background-color: #1890ff !important;
+  color: white !important;
+  font-weight: 500;
+}
+
+.hash-code {
+  color: #1890ff;
+  font-family: monospace;
+}
+
+.score-kpi-box {
+  padding: 24px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.kpi-label { font-size: 14px; color: #666; }
+.kpi-value { font-size: 32px; font-weight: 700; }
+
+.bg-blue-pale { background-color: #f0f7ff; }
+.bg-green-pale { background-color: #f6ffed; }
+.bg-red-pale { background-color: #fff1f0; }
+.bg-purple-pale { background-color: #f9f0ff; }
+
+.ai-issue-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.issue-item-card {
+  border-radius: 12px;
+}
+
+.issue-head {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.issue-ul { padding-left: 20px; margin: 0; }
+.issue-ul li { margin-bottom: 8px; color: #333; }
+
+.yellow-block { background-color: #fffbe6; }
+.blue-block { background-color: #e6f7ff; }
+.green-block { background-color: #f6ffed; }
+
+.blue-marker li::marker { color: #1890ff; }
+.green-marker li::marker { color: #52c41a; }
+
+.text-orange { color: #fa8c16; }
+.text-blue { color: #1890ff; }
+.text-green { color: #52c41a; }
+.text-red { color: #ff4d4f; }
+.text-purple { color: #722ed1; }

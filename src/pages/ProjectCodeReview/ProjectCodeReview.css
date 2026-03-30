@@ -1,0 +1,333 @@
+.project-code-review {
+  padding: 24px;
+  background: #f5f7fa;
+  min-height: 100vh;
+}
+
+/* 页面头部块 */
+.page-header-block {
+  background: #fff;
+  padding: 16px 24px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.page-header-block .back-btn {
+  padding: 0;
+  margin-bottom: 8px;
+}
+
+.report-time {
+  margin-top: 8px;
+  color: #999;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 筛选卡片 */
+.filter-card {
+  background: #fff;
+  padding: 16px 24px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+}
+
+.filter-label {
+  color: #666;
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+.week-info-text {
+  margin-left: 8px;
+  color: #666;
+  font-size: 13px;
+}
+
+/* 区块标题 */
+.block-header-title {
+  margin: 24px 0 16px;
+  color: #333;
+  font-weight: 600;
+  padding-left: 12px;
+  border-left: 3px solid #722ed1;
+}
+
+/* 版本信息卡片 */
+.info-cards-row {
+  margin-bottom: 0;
+}
+
+.info-box {
+  padding: 16px 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.info-box .info-label {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.info-box .info-val {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  word-break: break-all;
+}
+
+.info-box.bg-blue { background: #e6f7ff; }
+.info-box.bg-green { background: #f6ffed; }
+.info-box.bg-orange { background: #fff7e6; }
+.info-box.bg-purple { background: #f9f0ff; }
+
+/* 统计卡片 */
+.stat-cards-row {
+  margin-bottom: 0;
+}
+
+.stat-box {
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.stat-box .stat-label {
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 8px;
+}
+
+.stat-box .stat-val {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.stat-val.blue { color: #1890ff; }
+.stat-val.green { color: #52c41a; }
+.stat-val.red { color: #f5222d; }
+.stat-val.purple { color: #722ed1; }
+.stat-val.orange { color: #fa8c16; }
+
+/* 贡献者表格 */
+.purple-table .ant-table-thead > tr > th {
+  background: #f9f0ff;
+}
+
+/* 概览统计 */
+.overview-stats {
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card.critical {
+  border-left: 4px solid #ff4d4f;
+}
+
+.stat-card.major {
+  border-left: 4px solid #fa8c16;
+}
+
+.stat-card.minor {
+  border-left: 4px solid #52c41a;
+}
+
+.stat-card.files {
+  border-left: 4px solid #1890ff;
+}
+
+/* 问题卡片 */
+.issues-card {
+  margin-top: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.file-path {
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 12px;
+  color: #1890ff;
+}
+
+.suggestion-text {
+  color: #52c41a;
+  font-size: 12px;
+}
+
+/* 共性问题 */
+.common-issues-card {
+  margin-top: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 执行优先级表格 */
+.priority-card {
+  margin-top: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.priority-row-p0 {
+  background: #fff1f0 !important;
+}
+
+.priority-row-p1 {
+  background: #fff7e6 !important;
+}
+
+.priority-row-p2 {
+  background: #f6ffed !important;
+}
+
+/* 问题列表样式 */
+.issue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.issue-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 代码片段样式 */
+.code-snippet {
+  background: #f5f5f5;
+  padding: 12px;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+  font-size: 12px;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.code-snippet.error {
+  background: #fff1f0;
+  border: 1px solid #ffa39e;
+}
+
+.code-snippet.success {
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .overview-stats .ant-col {
+    margin-bottom: 12px;
+  }
+
+  .stat-cards-row .ant-col,
+  .info-cards-row .ant-col {
+    margin-bottom: 12px;
+  }
+}
+
+/* 总体评价卡片 */
+.overall-rating-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-top: 24px;
+}
+
+.overall-rating-card .ant-card-head {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.overall-rating-card .ant-card-body {
+  padding: 24px;
+}
+
+.rating-score-box {
+  text-align: center;
+  padding: 24px 16px;
+  border: 2px solid;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+  position: relative;
+}
+
+.rating-score-box .score-value {
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.rating-score-box .score-label {
+  font-size: 13px;
+  color: #999;
+  margin-top: 8px;
+}
+
+.rating-score-box .score-rating {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.04);
+  margin-top: 12px;
+}
+
+.rating-content {
+  padding-left: 8px;
+}
+
+.rating-section {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #fafafa;
+  border-radius: 8px;
+  border-left: 3px solid;
+}
+
+.rating-section:first-child {
+  border-left-color: #52c41a;
+}
+
+.rating-section:last-child {
+  margin-bottom: 0;
+  border-left-color: #fa8c16;
+}
+
+.rating-section ul {
+  color: #666;
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+.rating-section li {
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
+
+.rating-section li:last-child {
+  margin-bottom: 0;
+}

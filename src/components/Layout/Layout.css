@@ -1,0 +1,53 @@
+.custom-sider {
+  background-color: #fff !important;
+}
+
+.sider-logo {
+  padding: 24px 20px;
+  background-color: #fff;
+}
+
+.logo-subtitle {
+  font-size: 12px;
+  color: #999;
+  margin-top: 4px;
+}
+
+.custom-menu {
+  background: transparent !important;
+  border-inline-end: none !important;
+}
+
+.custom-menu .ant-menu-item {
+  height: 40px !important;
+  line-height: 40px !important;
+  border-radius: 6px !important;
+  margin: 4px 12px !important;
+  width: calc(100% - 24px) !important;
+  color: #333;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+}
+
+/* 选中项样式：对齐设计稿的淡蓝色背景和蓝色文字 */
+.custom-menu .ant-menu-item-selected {
+  background-color: #e6f7ff !important;
+  color: #1890ff !important;
+}
+
+.custom-menu .ant-menu-item-selected .ant-menu-item-icon {
+  color: #1890ff !important;
+}
+
+.layout-content {
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* 覆盖 antd sider 底部收起按钮的背景色 */
+.ant-layout-sider-trigger {
+  background: #fff !important;
+  color: #666 !important;
+  border-top: 1px solid #f0f0f0;
+  border-right: 1px solid #f0f0f0;
+}
