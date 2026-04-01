@@ -562,7 +562,7 @@ export const ProjectCodeReview: React.FC = () => {
       </div>
 
       {/* 统计维度切换 - 与小组整体分析报告页面保持一致 */}
-      <div className="filter-card">
+      {/* <div className="filter-card">
         <Space size="large">
           <div className="filter-group">
             <span className="filter-label">统计维度：</span>
@@ -585,7 +585,7 @@ export const ProjectCodeReview: React.FC = () => {
             )}
           </div>
         </Space>
-      </div>
+      </div> */}
 
       {/* 版本信息 - 移植自项目报告 */}
       <Title level={5} className="block-header-title" style={{ marginTop: 24 }}>版本信息</Title>
