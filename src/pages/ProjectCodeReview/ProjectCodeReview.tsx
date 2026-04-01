@@ -15,8 +15,6 @@ import {
   StarFilled
 } from '@ant-design/icons';
 import { request } from '../../api/client';
-import { PeriodSelector } from '../../components/PeriodSelector';
-import { usePeriodStore } from '../../stores/periodStore';
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import isoWeek from 'dayjs/plugin/isoWeek';
@@ -51,48 +49,24 @@ export const ProjectCodeReview: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { periodType, setPeriodType } = usePeriodStore();
 
-  // 从 URL 参数同步 periodType 到 store
-  useEffect(() => {
-    const urlPeriodType = searchParams.get('periodType');
-    if (urlPeriodType && (urlPeriodType === 'week' || urlPeriodType === 'month') && urlPeriodType !== periodType) {
-      setPeriodType(urlPeriodType as 'week' | 'month');
-    }
-  }, [searchParams, periodType, setPeriodType]);
+  // 直接从 URL 获取参数
+  const periodType = searchParams.get('periodType') || 'week';
+  const periodValue = searchParams.get('periodValue') || '';
 
-  // 从 URL 参数解析 periodValue 并设置 selectedDate
-  useEffect(() => {
-    const urlPeriodValue = searchParams.get('periodValue');
-    const urlPeriodType = searchParams.get('periodType') || periodType;
-    if (urlPeriodValue) {
-      if (urlPeriodType === 'week') {
-        // 周维度，格式 YYYYMMDD（周四日期）
-        const thursdayDate = dayjs(urlPeriodValue, 'YYYYMMDD');
-        if (thursdayDate.isValid()) {
-          setSelectedDate(thursdayDate);
-        }
-      } else if (urlPeriodType === 'month') {
-        // 月维度，格式 YYYYMM
-        const monthDate = dayjs(urlPeriodValue, 'YYYYMM');
-        if (monthDate.isValid()) {
-          setSelectedDate(monthDate);
-        }
+  // 初始化 selectedDate（用于日期选择器显示）
+  const [selectedDate] = useState<dayjs.Dayjs>(() => {
+    if (periodValue) {
+      if (periodType === 'week') {
+        const d = dayjs(periodValue, 'YYYYMMDD');
+        if (d.isValid()) return d;
+      } else if (periodType === 'month') {
+        const d = dayjs(periodValue, 'YYYYMM');
+        if (d.isValid()) return d;
       }
     }
-  }, [searchParams]); // 只在 URL 参数变化时执行一次
-
-  // 时间范围状态
-  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>(dayjs());
-
-  const getFormattedPeriodValue = useCallback(() => {
-    if (periodType === 'week') {
-      return selectedDate.day(4).format('YYYYMMDD');
-    }
-    return selectedDate.format('YYYYMM');
-  }, [periodType, selectedDate]);
-
-  const periodValue = getFormattedPeriodValue();
+    return dayjs();
+  });
 
   const getWeekInfo = () => {
     if (periodType !== 'week') return null;
