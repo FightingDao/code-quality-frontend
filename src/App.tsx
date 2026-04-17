@@ -10,6 +10,8 @@ import { ProjectReport } from './pages/ProjectReport';
 import { ProjectCodeReview } from './pages/ProjectCodeReview/ProjectCodeReview';
 import { TeamReport } from './pages/TeamReport';
 import { TeamManage } from './pages/TeamManage/TeamManage';
+import { BugAnalysis } from './pages/BugAnalysis';
+import { TaskDashboard } from './pages/TaskDashboard';
 import './styles/global.css';
 
 const queryClient = new QueryClient({
@@ -35,6 +37,8 @@ function App() {
               <Route path="/projects/:projectId/code-review" element={<ProjectCodeReview />} />
               <Route path="/users/:userId" element={<UserDetail />} />
               <Route path="/teams/:teamId/report" element={<TeamReport />} />
+              <Route path="/bugs" element={<BugAnalysis />} />
+              <Route path="/tasks" element={<TaskDashboard />} />
               <Route path="/teamConfig" element={<TeamManage />} />
             </Routes>
           </Layout>

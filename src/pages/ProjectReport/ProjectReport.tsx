@@ -130,7 +130,7 @@ export const ProjectReport: React.FC = () => {
 
       <div className="filter-card">
         <Space size="large">
-          <div className="filter-group"><span className="filter-label">统计维度：</span><PeriodSelector /></div>
+          {/* <div className="filter-group"><span className="filter-label">统计维度：</span><PeriodSelector /></div> */}
           <div className="filter-group">
             <span className="filter-label">时间范围：</span>
             <DatePicker

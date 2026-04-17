@@ -296,10 +296,10 @@ export const Dashboard: React.FC = () => {
     <div className="dashboard">
       <div className="dashboard-page-header">
         <Space size="large">
-          <div className="filter-group">
+          {/* <div className="filter-group">
             <span className="filter-label">统计维度：</span>
             <PeriodSelector />
-          </div>
+          </div> */}
           <div className="filter-group">
             <span className="filter-label">时间范围：</span>
             <DatePicker

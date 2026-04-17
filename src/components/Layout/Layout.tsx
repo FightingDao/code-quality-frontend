@@ -4,6 +4,8 @@ import {
   DashboardOutlined,
   ProjectOutlined,
   TeamOutlined,
+  BugOutlined,
+  AppstoreOutlined,
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Layout.css';
@@ -32,6 +34,16 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       label: '项目概览',
     },
     {
+      key: '/tasks',
+      icon: <AppstoreOutlined />,
+      label: '任务大盘',
+    },
+    {
+      key: '/bugs',
+      icon: <BugOutlined />,
+      label: 'Bug 分析',
+    },
+    {
       key: '/teamConfig',
       icon: <TeamOutlined />,
       label: '小组管理',
@@ -45,6 +57,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const getActiveKey = () => {
     if (location.pathname.startsWith('/dashboard')) return '/dashboard';
     if (location.pathname.startsWith('/projects')) return '/projects';
+    if (location.pathname.startsWith('/tasks')) return '/tasks';
+    if (location.pathname.startsWith('/bugs')) return '/bugs';
     if (location.pathname.startsWith('/teamConfig')) return '/teamConfig';
     return location.pathname;
   };
@@ -71,7 +85,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       >
         <div className="sider-logo">
           <Title level={4} style={{ color: '#000', margin: 0 }}>
-            {collapsed ? 'Code' : '代码分析看板'}
+            {collapsed ? 'CC' : 'CodeClaw'}
           </Title>
           {!collapsed && <div className="logo-subtitle">管理员视图</div>}
         </div>
