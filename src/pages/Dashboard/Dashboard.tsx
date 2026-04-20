@@ -4,6 +4,7 @@ import { SearchOutlined, EyeOutlined, DownOutlined, UpOutlined } from '@ant-desi
 import { KPICard } from '../../components/KPICard';
 import { PeriodSelector } from '../../components/PeriodSelector';
 import { usePeriodStore } from '../../stores/periodStore';
+import { useDefaultPeriod } from '../../hooks/useDefaultPeriod';
 import { request } from '../../api/client';
 import type { KPICardData } from '../../types';
 import { useNavigate } from 'react-router-dom';
@@ -55,13 +56,13 @@ interface CodeAnalysisItem {
 
 export const Dashboard: React.FC = () => {
   const { periodType } = usePeriodStore();
+  const [selectedDate, setSelectedDate] = useDefaultPeriod('/dashboard/periods', periodType);
   const [loading, setLoading] = useState(false);
   const [overview, setOverview] = useState<DashboardOverview | null>(null);
   const [teamDashboards, setTeamDashboards] = useState<TeamDashboard[]>([]);
   const [analyses, setAnalyses] = useState<CodeAnalysisItem[]>([]);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
   const [isTeamsExpanded, setIsTeamsExpanded] = useState(true);
-  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>(dayjs());
   const navigate = useNavigate();
 
   // 筛选状态

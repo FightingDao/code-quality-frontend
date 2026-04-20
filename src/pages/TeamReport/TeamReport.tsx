@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { request } from '../../api/client';
 import { PeriodSelector } from '../../components/PeriodSelector';
 import { usePeriodStore } from '../../stores/periodStore';
+import { useDefaultPeriod } from '../../hooks/useDefaultPeriod';
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import isoWeek from 'dayjs/plugin/isoWeek';
@@ -23,9 +24,9 @@ type SortOrder = 'ascend' | 'descend';
 export const TeamReport: React.FC = () => {
   const { teamId } = useParams<{ teamId: string }>();
   const { periodType } = usePeriodStore();
+  const [selectedDate, setSelectedDate] = useDefaultPeriod('/dashboard/periods', periodType);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>(null);
-  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>(dayjs());
   const navigate = useNavigate();
 
   // 排序状态：默认按代码质量降序

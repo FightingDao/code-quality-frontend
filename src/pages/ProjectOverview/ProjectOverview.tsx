@@ -4,6 +4,7 @@ import { EyeOutlined, FileTextOutlined, SearchOutlined, BugOutlined } from '@ant
 import { KPICard } from '../../components/KPICard';
 import { PeriodSelector } from '../../components/PeriodSelector';
 import { usePeriodStore } from '../../stores/periodStore';
+import { useDefaultPeriod } from '../../hooks/useDefaultPeriod';
 import { request } from '../../api/client';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -21,10 +22,10 @@ const { Option } = Select;
 
 export const ProjectOverview: React.FC = () => {
   const { periodType } = usePeriodStore();
+  const [selectedDate, setSelectedDate] = useDefaultPeriod('/dashboard/periods', periodType);
   const [loading, setLoading] = useState(false);
   const [analyses, setAnalyses] = useState<any[]>([]);
   const [allAnalyses, setAllAnalyses] = useState<any[]>([]); // 所有项目数据，用于统计卡片
-  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>(dayjs());
   // const [teams, setTeams] = useState<{ id: string; name: string }[]>([]);
   const [projects, setProjects] = useState<{ id: string; name: string }[]>([]);
   const [users, setUsers] = useState<{ id: string; name: string }[]>([]);

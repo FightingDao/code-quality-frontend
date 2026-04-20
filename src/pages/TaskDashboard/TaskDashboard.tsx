@@ -11,6 +11,7 @@ import { Pie, Radar } from '@ant-design/charts';
 import { request } from '../../api/client';
 import { PeriodSelector } from '../../components/PeriodSelector';
 import { usePeriodStore } from '../../stores/periodStore';
+import { useDefaultPeriod } from '../../hooks/useDefaultPeriod';
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import isoWeek from 'dayjs/plugin/isoWeek';
@@ -267,7 +268,7 @@ function DimensionBars({ item }: { item: TaskItem }) {
 
 export const TaskDashboard: React.FC = () => {
   const { periodType } = usePeriodStore();
-  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>(dayjs());
+  const [selectedDate, setSelectedDate] = useDefaultPeriod('/tasks/periods', periodType);
   const [kpi, setKpi] = useState<KPIData | null>(null);
   const [distribution, setDistribution] = useState<DistributionItem[]>([]);
   const [avgDimensions, setAvgDimensions] = useState<DimensionItem[]>([]);

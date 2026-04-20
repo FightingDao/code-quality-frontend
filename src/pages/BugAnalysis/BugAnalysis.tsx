@@ -13,6 +13,7 @@ import { KPICard } from '../../components/KPICard';
 import { request } from '../../api/client';
 import { PeriodSelector } from '../../components/PeriodSelector';
 import { usePeriodStore } from '../../stores/periodStore';
+import { useDefaultPeriod } from '../../hooks/useDefaultPeriod';
 import type { KPICardData } from '../../types';
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
@@ -147,7 +148,7 @@ function DiffViewer({ diff }: { diff: string }) {
 
 export const BugAnalysis: React.FC = () => {
   const { periodType } = usePeriodStore();
-  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>(dayjs());
+  const [selectedDate, setSelectedDate] = useDefaultPeriod('/bugs/periods', periodType);
   const [loading, setLoading] = useState(false);
   const [overview, setOverview] = useState<BugOverviewData | null>(null);
   const [trend, setTrend] = useState<BugTrendPoint[]>([]);
