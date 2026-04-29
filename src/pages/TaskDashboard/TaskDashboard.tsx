@@ -268,7 +268,7 @@ function DimensionBars({ item }: { item: TaskItem }) {
 
 export const TaskDashboard: React.FC = () => {
   const { periodType } = usePeriodStore();
-  const [selectedDate, setSelectedDate] = useDefaultPeriod('/tasks/periods', periodType);
+  const [selectedDate, setSelectedDate, ready] = useDefaultPeriod('/tasks/periods', periodType);
   const [kpi, setKpi] = useState<KPIData | null>(null);
   const [distribution, setDistribution] = useState<DistributionItem[]>([]);
   const [avgDimensions, setAvgDimensions] = useState<DimensionItem[]>([]);
@@ -303,6 +303,7 @@ export const TaskDashboard: React.FC = () => {
 
   // 加载数据
   useEffect(() => {
+    if (!ready) return;
     setLoading(true);
     Promise.all([
       request.get('/tasks/overview', { periodType, periodValue }),
@@ -312,17 +313,18 @@ export const TaskDashboard: React.FC = () => {
       setDistribution(distRes.data?.difficultyDistribution ?? []);
       setAvgDimensions(distRes.data?.avgDimensions ?? []);
     }).catch(() => {}).finally(() => setLoading(false));
-  }, [periodType, periodValue]);
+  }, [periodType, periodValue, ready]);
 
   // 加载任务列表
   useEffect(() => {
+    if (!ready) return;
     const params: any = { periodType, periodValue, page: taskPage, limit: taskLimit };
     if (filterLevel) params.difficulty = filterLevel;
     request.get('/tasks/list', params).then((res: any) => {
       setTasks(res.data?.items ?? []);
       setTaskTotal(res.data?.meta?.total ?? 0);
     }).catch(() => {});
-  }, [periodType, periodValue, taskPage, taskLimit, filterLevel]);
+  }, [periodType, periodValue, taskPage, taskLimit, filterLevel, ready]);
 
   const pieData = distribution.map(d => ({
     type: LEVEL_CONFIG[d.level]?.label ?? d.level,

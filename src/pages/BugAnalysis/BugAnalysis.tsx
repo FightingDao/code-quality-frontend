@@ -148,7 +148,7 @@ function DiffViewer({ diff }: { diff: string }) {
 
 export const BugAnalysis: React.FC = () => {
   const { periodType } = usePeriodStore();
-  const [selectedDate, setSelectedDate] = useDefaultPeriod('/bugs/periods', periodType);
+  const [selectedDate, setSelectedDate, ready] = useDefaultPeriod('/bugs/periods', periodType);
   const [loading, setLoading] = useState(false);
   const [overview, setOverview] = useState<BugOverviewData | null>(null);
   const [trend, setTrend] = useState<BugTrendPoint[]>([]);
@@ -224,8 +224,8 @@ export const BugAnalysis: React.FC = () => {
     }
   }, [periodType, getPeriodValue, bugPage, severityFilter, statusFilter]);
 
-  useEffect(() => { loadData(); }, [loadData]);
-  useEffect(() => { loadBugList(); }, [loadBugList]);
+  useEffect(() => { if (ready) loadData(); }, [loadData, ready]);
+  useEffect(() => { if (ready) loadBugList(); }, [loadBugList, ready]);
 
   const openDetail = useCallback(async (bugNo: string) => {
     setDetailVisible(true);

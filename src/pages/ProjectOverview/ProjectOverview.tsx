@@ -22,7 +22,7 @@ const { Option } = Select;
 
 export const ProjectOverview: React.FC = () => {
   const { periodType } = usePeriodStore();
-  const [selectedDate, setSelectedDate] = useDefaultPeriod('/dashboard/periods', periodType);
+  const [selectedDate, setSelectedDate, ready] = useDefaultPeriod('/dashboard/periods', periodType);
   const [loading, setLoading] = useState(false);
   const [analyses, setAnalyses] = useState<any[]>([]);
   const [allAnalyses, setAllAnalyses] = useState<any[]>([]); // 所有项目数据，用于统计卡片
@@ -64,10 +64,11 @@ export const ProjectOverview: React.FC = () => {
   const periodValue = getFormattedPeriodValue();
 
   useEffect(() => {
+    if (!ready) return;
     fetchAllAnalyses(); // 获取所有项目数据（统计卡片）
     fetchAnalyses();    // 获取筛选后的数据（表格）
     fetchFilterOptions();
-  }, [periodType, selectedDate]);
+  }, [periodType, selectedDate, ready]);
 
   const fetchFilterOptions = async () => {
     const periodValue = getFormattedPeriodValue();

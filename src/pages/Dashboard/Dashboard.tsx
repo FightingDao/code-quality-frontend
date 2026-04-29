@@ -56,7 +56,7 @@ interface CodeAnalysisItem {
 
 export const Dashboard: React.FC = () => {
   const { periodType } = usePeriodStore();
-  const [selectedDate, setSelectedDate] = useDefaultPeriod('/dashboard/periods', periodType);
+  const [selectedDate, setSelectedDate, ready] = useDefaultPeriod('/dashboard/periods', periodType);
   const [loading, setLoading] = useState(false);
   const [overview, setOverview] = useState<DashboardOverview | null>(null);
   const [teamDashboards, setTeamDashboards] = useState<TeamDashboard[]>([]);
@@ -169,10 +169,11 @@ export const Dashboard: React.FC = () => {
   };
 
   useEffect(() => {
+    if (!ready) return;
     fetchDashboardData();
     fetchFilters();
     fetchAnalyses(1, 10, 'insertions', 'desc');
-  }, [periodType, selectedDate]);
+  }, [periodType, selectedDate, ready]);
 
   const kpiData: Array<{ data: KPICardData; iconType: 'user' | 'commit' | 'task' | 'trophy' }> = overview
     ? [

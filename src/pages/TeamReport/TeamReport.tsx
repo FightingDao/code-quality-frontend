@@ -24,7 +24,7 @@ type SortOrder = 'ascend' | 'descend';
 export const TeamReport: React.FC = () => {
   const { teamId } = useParams<{ teamId: string }>();
   const { periodType } = usePeriodStore();
-  const [selectedDate, setSelectedDate] = useDefaultPeriod('/dashboard/periods', periodType);
+  const [selectedDate, setSelectedDate, ready] = useDefaultPeriod('/dashboard/periods', periodType);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>(null);
   const navigate = useNavigate();
@@ -56,8 +56,9 @@ export const TeamReport: React.FC = () => {
   const weekInfo = getWeekInfo();
 
   useEffect(() => {
+    if (!ready) return;
     fetchReport();
-  }, [teamId, periodType, selectedDate]);
+  }, [teamId, periodType, selectedDate, ready]);
 
   const fetchReport = async () => {
     if (!teamId) return;
