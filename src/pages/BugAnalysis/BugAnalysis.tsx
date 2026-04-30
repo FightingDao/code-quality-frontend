@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Row, Col, Card, Table, Tag, Typography, Select, Spin,
   Empty, Alert, Space, Badge, Tooltip, DatePicker, Modal, Descriptions, Divider, Button,
@@ -8,7 +8,7 @@ import {
   WarningOutlined, CheckCircleOutlined, RobotOutlined, EyeOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
-import { Column, Line, Area } from '@ant-design/charts';
+import { EChart, echarts } from '../../components/EChart';
 import { KPICard } from '../../components/KPICard';
 import { request } from '../../api/client';
 import { PeriodSelector } from '../../components/PeriodSelector';
@@ -263,10 +263,225 @@ export const BugAnalysis: React.FC = () => {
   const severityChartData = [...(overview?.severityDistribution || [])]
     .sort((a, b) => (SEVERITY_ORDER[a.severity] ?? 9) - (SEVERITY_ORDER[b.severity] ?? 9));
 
-  const trendLineData = trend.flatMap(p => [
-    { period: p.periodValue, value: p.totalBugs, type: '总计' },
-    { period: p.periodValue, value: p.criticalAndSevere, type: '致命+严重' },
-  ]);
+  const trendChartOption = useMemo<echarts.EChartsOption>(() => {
+    const periods = trend.map(p => p.periodValue);
+    const totalSeries = trend.map(p => p.totalBugs);
+    const criticalSeries = trend.map(p => p.criticalAndSevere);
+    return {
+      tooltip: {
+        trigger: 'axis',
+        backgroundColor: '#1e293b',
+        borderColor: 'rgba(99,102,241,0.3)',
+        borderWidth: 1,
+        borderRadius: 10,
+        textStyle: { color: '#f1f5f9', fontSize: 13 },
+        formatter: (params: any[]) => {
+          const title = params[0].axisValue;
+          const items = params.map(p =>
+            `<div style="display:flex;align-items:center;gap:8px;margin:4px 0">
+              <span style="width:8px;height:8px;border-radius:50%;background:${p.color};display:inline-block"></span>
+              <span style="color:#94a3b8;font-size:12px">${p.seriesName}</span>
+              <span style="color:#f1f5f9;font-weight:600;margin-left:auto">${p.value} 个</span>
+            </div>`
+          ).join('');
+          return `<div style="padding:4px 0"><div style="color:#94a3b8;font-size:11px;margin-bottom:6px">${title}</div>${items}</div>`;
+        },
+      },
+      legend: {
+        top: 0,
+        right: 0,
+        itemWidth: 12,
+        itemHeight: 8,
+        borderRadius: 4,
+        textStyle: { color: '#64748b', fontSize: 12 },
+      },
+      grid: { left: 40, right: 20, top: 36, bottom: 30 },
+      xAxis: {
+        type: 'category',
+        data: periods,
+        axisLabel: { color: '#64748b', fontSize: 11 },
+        axisLine: { lineStyle: { color: '#cbd5e1' } },
+        axisTick: { show: false },
+      },
+      yAxis: {
+        type: 'value',
+        minInterval: 1,
+        axisLabel: { color: '#64748b', fontSize: 11 },
+        splitLine: { lineStyle: { color: '#e2e8f0', type: 'dashed' } },
+        axisLine: { show: false },
+      },
+      series: [
+        {
+          name: '总计',
+          type: 'line',
+          smooth: true,
+          data: totalSeries,
+          symbol: 'circle',
+          symbolSize: 7,
+          lineStyle: { width: 2.5, color: '#6366f1' },
+          itemStyle: { color: '#6366f1', borderColor: '#fff', borderWidth: 2 },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: 'rgba(99,102,241,0.35)' },
+              { offset: 1, color: 'rgba(99,102,241,0.03)' },
+            ]),
+          },
+        },
+        {
+          name: '致命+严重',
+          type: 'line',
+          smooth: true,
+          data: criticalSeries,
+          symbol: 'circle',
+          symbolSize: 7,
+          lineStyle: { width: 2, color: '#f43f5e' },
+          itemStyle: { color: '#f43f5e', borderColor: '#fff', borderWidth: 2 },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: 'rgba(244,63,94,0.25)' },
+              { offset: 1, color: 'rgba(244,63,94,0.02)' },
+            ]),
+          },
+        },
+      ],
+    };
+  }, [trend]);
+
+  const SEVERITY_BAR_COLORS: Record<string, [string, string]> = {
+    '致命': ['#dc2626', '#f87171'],
+    '严重': ['#ea580c', '#fb923c'],
+    '一般': ['#2563eb', '#60a5fa'],
+    '轻微': ['#059669', '#34d399'],
+    '未知': ['#6b7280', '#9ca3af'],
+  };
+
+  const severityChartOption = useMemo<echarts.EChartsOption>(() => ({
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: '#1e293b',
+      borderColor: 'rgba(99,102,241,0.3)',
+      borderWidth: 1,
+      borderRadius: 10,
+      textStyle: { color: '#f1f5f9', fontSize: 13 },
+      formatter: (params: any[]) => {
+        const p = params[0];
+        const [start] = SEVERITY_BAR_COLORS[p.name] || ['#3b82f6', '#3b82f6'];
+        return `<div style="padding:4px 0">
+          <div style="color:#94a3b8;font-size:11px;margin-bottom:6px">严重程度</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="width:10px;height:10px;border-radius:3px;background:${start};display:inline-block"></span>
+            <span style="color:#f1f5f9;font-weight:600">${p.name}: ${p.value} 个</span>
+          </div>
+        </div>`;
+      },
+    },
+    grid: { left: 36, right: 24, top: 20, bottom: 30 },
+    xAxis: {
+      type: 'category',
+      data: severityChartData.map(d => d.severity),
+      axisLabel: { color: '#64748b', fontSize: 12, fontWeight: '500' as any },
+      axisLine: { lineStyle: { color: '#cbd5e1' } },
+      axisTick: { show: false },
+    },
+    yAxis: {
+      type: 'value',
+      minInterval: 1,
+      axisLabel: { color: '#64748b', fontSize: 11 },
+      splitLine: { lineStyle: { color: '#e2e8f0', type: 'dashed' } },
+      axisLine: { show: false },
+    },
+    series: [{
+      type: 'bar',
+      data: severityChartData.map(d => ({
+        value: d.count,
+        itemStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: (SEVERITY_BAR_COLORS[d.severity] || ['#3b82f6', '#93c5fd'])[0] },
+            { offset: 1, color: (SEVERITY_BAR_COLORS[d.severity] || ['#3b82f6', '#93c5fd'])[1] },
+          ]),
+          borderRadius: [6, 6, 0, 0],
+          shadowColor: 'rgba(0,0,0,0.08)',
+          shadowBlur: 8,
+          shadowOffsetY: 2,
+        },
+      })),
+      barMaxWidth: 40,
+      barMinWidth: 24,
+      label: {
+        show: true,
+        position: 'top',
+        distance: 4,
+        color: '#475569',
+        fontSize: 12,
+        fontWeight: '600' as any,
+      },
+    }],
+  }), [severityChartData]);
+
+  const phaseChartOption = useMemo<echarts.EChartsOption>(() => {
+    const phaseData = overview?.phaseDistribution || [];
+    return {
+      tooltip: {
+        trigger: 'axis',
+        backgroundColor: '#1e293b',
+        borderColor: 'rgba(99,102,241,0.3)',
+        borderWidth: 1,
+        borderRadius: 10,
+        textStyle: { color: '#f1f5f9', fontSize: 13 },
+        formatter: (params: any[]) => {
+          const p = params[0];
+          return `<div style="padding:4px 0">
+            <div style="color:#94a3b8;font-size:11px;margin-bottom:6px">发现阶段</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="width:10px;height:10px;border-radius:3px;background:#6366f1;display:inline-block"></span>
+              <span style="color:#f1f5f9;font-weight:600">${p.name}: ${p.value} 个</span>
+            </div>
+          </div>`;
+        },
+      },
+      grid: { left: 36, right: 24, top: 20, bottom: 30 },
+      xAxis: {
+        type: 'category',
+        data: phaseData.map(d => d.phase),
+        axisLabel: { color: '#64748b', fontSize: 11, fontWeight: '500' as any },
+        axisLine: { lineStyle: { color: '#cbd5e1' } },
+        axisTick: { show: false },
+      },
+      yAxis: {
+        type: 'value',
+        minInterval: 1,
+        axisLabel: { color: '#64748b', fontSize: 11 },
+        splitLine: { lineStyle: { color: '#e2e8f0', type: 'dashed' } },
+        axisLine: { show: false },
+      },
+      series: [{
+        type: 'bar',
+        data: phaseData.map((d, i) => ({
+          value: d.count,
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: i % 2 === 0 ? '#4f46e5' : '#0891b2' },
+              { offset: 1, color: i % 2 === 0 ? '#818cf8' : '#67e8f9' },
+            ]),
+            borderRadius: [6, 6, 0, 0],
+            shadowColor: 'rgba(99,102,241,0.2)',
+            shadowBlur: 10,
+            shadowOffsetY: 4,
+          },
+        })),
+        barMaxWidth: 44,
+        barMinWidth: 28,
+        label: {
+          show: true,
+          position: 'top',
+          distance: 4,
+          color: '#475569',
+          fontSize: 12,
+          fontWeight: '600' as any,
+        },
+      }],
+    };
+  }, [overview?.phaseDistribution]);
 
   const kpiData: Array<{ data: KPICardData; iconType: 'user' | 'commit' | 'task' | 'trophy' }> = overview
     ? [
@@ -395,43 +610,8 @@ export const BugAnalysis: React.FC = () => {
             <Row gutter={[24, 24]} style={{ marginBottom: 24 }}>
               <Col span={10}>
                 <Card title="缺陷趋势（最近 7 期）" bordered={false} size="small" className="chart-card">
-                  {trendLineData.length > 0 ? (
-                    <Area
-                      data={trendLineData}
-                      xField="period"
-                      yField="value"
-                      seriesField="type"
-                      height={CHART_HEIGHT}
-                      legend={{
-                        position: 'top',
-                        itemSpacing: 16,
-                        itemName: { style: { fill: '#475569', fontSize: 12, fontWeight: 500 } },
-                        marker: { style: { r: 4 } },
-                      }}
-                      color={['l(270) 0:#6366f1 1:#e0e7ff', 'l(270) 0:#f43f5e 1:#ffe4e6']}
-                      areaStyle={{ fillOpacity: 0.6 }}
-                      line={{ smooth: true, size: 2 }}
-                      point={{
-                        size: 4,
-                        shape: 'circle',
-                        style: { stroke: '#fff', lineWidth: 2 },
-                      }}
-                      yAxis={{
-                        label: { style: { fill: '#64748b', fontSize: 11 }, formatter: (v: number) => Math.round(v) },
-                        grid: { line: { style: { stroke: '#e2e8f0', lineDash: [3, 3] } } },
-                      }}
-                      xAxis={{
-                        label: { style: { fill: '#64748b', fontSize: 11 } },
-                        line: { style: { stroke: '#cbd5e1' } },
-                        tickLine: { style: { stroke: '#cbd5e1' } },
-                      }}
-                      tooltip={{
-                        domStyles: { 'g2-tooltip': { background: '#1e293b', borderRadius: '8px', boxShadow: '0 10px 25px rgba(0,0,0,0.2)' } },
-                        customContent: (title: string, items: any[]) => {
-                          return `<div style="padding: 8px 12px;"><div style="color: #94a3b8; font-size: 11px; margin-bottom: 4px;">${title}</div>${items.map(item => `<div style="display: flex; align-items: center; margin: 4px 0;"><span style="width: 8px; height: 8px; border-radius: 50%; background: ${item.color}; margin-right: 8px;"></span><span style="color: #f1f5f9; font-size: 13px; font-weight: 500;">${item.value} 个</span></div>`).join('')}</div>`;
-                        },
-                      }}
-                    />
+                  {trend.length > 0 ? (
+                    <EChart option={trendChartOption} height={CHART_HEIGHT} />
                   ) : (
                     <Empty description="暂无趋势数据" style={{ paddingTop: 60 }} />
                   )}
@@ -439,84 +619,20 @@ export const BugAnalysis: React.FC = () => {
               </Col>
               <Col span={7}>
                 <Card title="严重程度分布" bordered={false} size="small" className="chart-card">
-                  <Column
-                    data={severityChartData}
-                    xField="severity"
-                    yField="count"
-                    isGroup={false}
-                    maxColumnWidth={36}
-                    minColumnWidth={24}
-                    columnStyle={{ radius: [6, 6, 0, 0], shadowColor: 'rgba(0,0,0,0.08)', shadowBlur: 8, shadowOffsetY: 2 }}
-                    label={{
-                      position: 'top',
-                      offsetY: -2,
-                      style: { fill: '#475569', fontSize: 12, fontWeight: 600, textShadow: '0 1px 2px rgba(255,255,255,0.8)' },
-                    }}
-                    color={({ severity }: any) => {
-                      const gradients: Record<string, [string, string]> = {
-                        '致命': ['#dc2626', '#f87171'],
-                        '严重': ['#ea580c', '#fb923c'],
-                        '一般': ['#2563eb', '#60a5fa'],
-                        '轻微': ['#059669', '#34d399'],
-                        '未知': ['#6b7280', '#9ca3af'],
-                      };
-                      const [start, end] = gradients[severity] || ['#3b82f6', '#60a5fa'];
-                      return `l(270) 0:${start} 1:${end}`;
-                    }}
-                    height={CHART_HEIGHT}
-                    yAxis={{
-                      label: { style: { fill: '#64748b', fontSize: 11 }, formatter: (v: number) => Math.round(v) },
-                      grid: { line: { style: { stroke: '#e2e8f0', lineDash: [3, 3] } } },
-                    }}
-                    xAxis={{
-                      label: { style: { fill: '#64748b', fontSize: 11, fontWeight: 500 } },
-                      line: { style: { stroke: '#cbd5e1' } },
-                      tickLine: { style: { stroke: '#cbd5e1' } },
-                    }}
-                    tooltip={{
-                      domStyles: { 'g2-tooltip': { background: '#1e293b', borderRadius: '8px', boxShadow: '0 10px 25px rgba(0,0,0,0.2)' } },
-                      customContent: (title: string, items: any[]) => {
-                        const item = items[0];
-                        return `<div style="padding: 8px 12px;"><div style="color: #94a3b8; font-size: 11px; margin-bottom: 4px;">严重程度</div><div style="display: flex; align-items: center;"><span style="width: 10px; height: 10px; border-radius: 2px; background: ${item?.color}; margin-right: 8px;"></span><span style="color: #f1f5f9; font-size: 13px; font-weight: 500;">${title}: ${item?.value} 个</span></div></div>`;
-                      },
-                    }}
-                  />
+                  {severityChartData.length > 0 ? (
+                    <EChart option={severityChartOption} height={CHART_HEIGHT} />
+                  ) : (
+                    <Empty description="暂无数据" style={{ paddingTop: 60 }} />
+                  )}
                 </Card>
               </Col>
               <Col span={7}>
                 <Card title="发现阶段分布" bordered={false} size="small" className="chart-card">
-                  <Column
-                    data={overview?.phaseDistribution || []}
-                    xField="phase"
-                    yField="count"
-                    isGroup={false}
-                    maxColumnWidth={40}
-                    minColumnWidth={28}
-                    columnStyle={{ radius: [6, 6, 0, 0], shadowColor: 'rgba(99,102,241,0.2)', shadowBlur: 10, shadowOffsetY: 4 }}
-                    label={{
-                      position: 'top',
-                      offsetY: -2,
-                      style: { fill: '#475569', fontSize: 12, fontWeight: 600, textShadow: '0 1px 2px rgba(255,255,255,0.8)' },
-                    }}
-                    color="l(270) 0:#4f46e5 1:#818cf8"
-                    height={CHART_HEIGHT}
-                    yAxis={{
-                      label: { style: { fill: '#64748b', fontSize: 11 }, formatter: (v: number) => Math.round(v) },
-                      grid: { line: { style: { stroke: '#e2e8f0', lineDash: [3, 3] } } },
-                    }}
-                    xAxis={{
-                      label: { style: { fill: '#64748b', fontSize: 11, fontWeight: 500 } },
-                      line: { style: { stroke: '#cbd5e1' } },
-                      tickLine: { style: { stroke: '#cbd5e1' } },
-                    }}
-                    tooltip={{
-                      domStyles: { 'g2-tooltip': { background: '#1e293b', borderRadius: '8px', boxShadow: '0 10px 25px rgba(0,0,0,0.2)' } },
-                      customContent: (title: string, items: any[]) => {
-                        const item = items[0];
-                        return `<div style="padding: 8px 12px;"><div style="color: #94a3b8; font-size: 11px; margin-bottom: 4px;">发现阶段</div><div style="display: flex; align-items: center;"><span style="width: 10px; height: 10px; border-radius: 2px; background: ${item?.color}; margin-right: 8px;"></span><span style="color: #f1f5f9; font-size: 13px; font-weight: 500;">${title}: ${item?.value} 个</span></div></div>`;
-                      },
-                    }}
-                  />
+                  {(overview?.phaseDistribution?.length ?? 0) > 0 ? (
+                    <EChart option={phaseChartOption} height={CHART_HEIGHT} />
+                  ) : (
+                    <Empty description="暂无数据" style={{ paddingTop: 60 }} />
+                  )}
                 </Card>
               </Col>
             </Row>
